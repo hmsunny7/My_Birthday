@@ -1,0 +1,90 @@
+html,
+body {
+  height: 100vh;
+  word-break: break-all;
+  background-image: url("./PpQbv5.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: move 10s infinite;
+}
+
+h1,p {
+  font-size: 1.25rem;
+  color: coral;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+b {
+  color: coral;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+#time-container {
+  background-image: url("./ZxKe4g.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  animation: mymove 10s infinite;
+}
+
+@keyframes mymove {
+  0% {
+    background-position: 10% 10%;
+    padding: 0rem;
+    font-size:1.5rem;
+    
+  }
+
+  25% {
+    background-position: 50% 50%;
+    padding: 2rem;
+    font-size:1.25rem;
+  }
+
+  50% {
+    background-position: 100% 100%;
+    padding: 3rem;
+    font-size:1rem;
+  }
+
+  75% {
+    background-position: 50% 50%;
+    padding: 2rem;
+    font-size:1.25rem;
+  }
+
+  100% {
+    background-position: 10% 10%;
+    padding: 0rem;
+    font-size:1.5rem;
+  }
+}
+@keyframes move {
+  0% {
+    background-position: 10% 10%;
+    padding: 1rem;
+    
+  }
+
+  25% {
+    background-position: 50% 50%;
+    padding: 0.5rem;
+  }
+
+  50% {
+    background-position: 100% 100%;
+    padding: 0rem;
+  }
+
+  75% {
+    background-position: 50% 50%;
+    padding: 0.5rem;
+  }
+
+  100% {
+    background-position: 10% 10%;
+    padding: 1rem;
+  }
+} 
