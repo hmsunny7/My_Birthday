@@ -1,39 +1,23 @@
-html,
-body {
-  height: 100vh;
+body,
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
   word-break: break-all;
-  background-image: url("./PpQbv5.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  animation: move 10s infinite;
-}
-
-h1,p {
-  font-size: 1.25rem;
-  color: coral;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-b {
-  color: coral;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-#time-container {
   background-image: url("./ZxKe4g.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  position: relative;
-  animation: mymove 10s infinite;
+  position: fixed;
 }
 
-@keyframes mymove {
-  0% {
-    background-position: 10% 10%;
-    padding: 0rem;
-    font-size:1.5rem;
+h1 {
+  font-size: 4.5rem;
+  color: coral;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
     
   }
 
