@@ -68,7 +68,7 @@ const countDown = () => {
     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    document.getElementById("date").innerHTML = seconds % 10 <= 5 ? `17/12/${year}` : "SupperSun";
+    document.getElementById("date").innerHTML = seconds % 10 <= 5 ? `22/11/${year}` : "SupperSun";
     document.getElementById("days").innerHTML = days;
     document.getElementById("hours").innerHTML = hours;
     document.getElementById("minutes").innerHTML = minutes;
