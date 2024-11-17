@@ -57,7 +57,8 @@ const countDown = () => {
   var x = setInterval(function() {
     let date = new Date();
     let year = date.getFullYear();
-    var times = new Date(`Dec 17, ${year}   00:00:00`).getTime()
+    //var times = new Date(`Dec 17, ${year}   00:00:00`).getTime()
+   var times = new Date(`Nov 22, ${year}   00:00:00`).getTime()
     var now = new Date().getTime();
 
 
