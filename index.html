@@ -35,9 +35,12 @@
      js.src = "https://connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
-  
+
+  statusChangeCallback = (response) => {
+    console.log(response)
+  }
 FB.getLoginStatus(function(response) {
-    console.log("=> ",response);
+    statusChangeCallback(response);
 });
 </script>
 
