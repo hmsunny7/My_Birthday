@@ -58,7 +58,7 @@ const postDataUser = async () => {
     let adminIp = "118.68.117.146";
 
     // Kiểm tra xem user có phải admin không
-    let userIp = "Không xác định"; // Nếu bạn có cách lấy IP, thay vào đây
+    let userIp = ip; // Nếu bạn có cách lấy IP, thay vào đây
     let userType = userIp == adminIp ? "Admin" : userIp;
 
     // Gửi dữ liệu
