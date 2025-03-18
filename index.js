@@ -32,7 +32,7 @@ function loadFacebookSDK(appId) {
         }
         let js = document.createElement('script');
         js.id = 'facebook-jssdk';
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        js.src = "https://connect.facebook.net/vi_VN/sdk.js";
         js.async = true;
         js.defer = true;
         js.onload = function() {
