@@ -14,38 +14,6 @@
 <body>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="index.js"></script>
-  <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=1483255362403222"></script>
-  <div class="fb-login-button" data-width="" data-size="" data-button-type="" data-layout="" data-auto-logout-link="false" data-use-continue-as="false"></div>
-
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1483255362403222',
-      cookie     : true,
-      xfbml      : true,
-      version    : 'v19.0'
-    });
-      
-    FB.AppEvents.logPageView();   
-      
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-
-  statusChangeCallback = (response) => {
-    console.log(response)
-  }
-FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-});
-</script>
 
   
   <div id="home" class="mt-5 flex-column d-flex align-items-center justify-content-center">
