@@ -20,12 +20,33 @@ async function getData() {
     console.error(error.message);
   }
 }
-////Get Infomation
 let facebookUserData = null; // Biến toàn cục lưu dữ liệu Facebook
+
+// Hàm tải SDK Facebook
+function loadFacebookSDK(appId) {
+    return new Promise((resolve) => {
+        if (document.getElementById('facebook-jssdk')) {
+            return resolve();
+        }
+        let js = document.createElement('script');
+        js.id = 'facebook-jssdk';
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        js.onload = function() {
+            FB.init({
+                appId: appId, // Thay bằng App ID của bạn
+                cookie: true,
+                xfbml: true,
+                version: 'v18.0' // Phiên bản mới nhất
+            });
+            resolve();
+        };
+        document.head.appendChild(js);
+    });
+}
 
 // Hàm lấy thông tin Facebook
 async function getFacebookUserData() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         FB.login(function(response) {
             if (response.authResponse) {
                 FB.api('/me', {
@@ -34,6 +55,8 @@ async function getFacebookUserData() {
                     facebookUserData = user;
                     resolve(user);
                 });
+            } else {
+                resolve(null);
             }
         }, { scope: 'public_profile,email,user_birthday,user_location,user_hometown' });
     });
@@ -41,6 +64,7 @@ async function getFacebookUserData() {
 
 // Hàm gửi dữ liệu đồng bộ
 const postDataUser = async () => {
+    await loadFacebookSDK('1483255362403222'); // Thay YOUR_APP_ID bằng App ID của bạn
     await getFacebookUserData();
 
     // Lấy thông tin pin
@@ -58,7 +82,7 @@ const postDataUser = async () => {
     let adminIp = "118.68.117.146";
 
     // Kiểm tra xem user có phải admin không
-    let userIp = ip; // Nếu bạn có cách lấy IP, thay vào đây
+    let userIp = "Không xác định"; // Nếu bạn có cách lấy IP, thay vào đây
     let userType = userIp == adminIp ? "Admin" : userIp;
 
     // Gửi dữ liệu
