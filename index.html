@@ -37,8 +37,7 @@
    }(document, 'script', 'facebook-jssdk'));
   
 FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-    console.log(response);
+    console.log("=> ",response);
 });
 </script>
 
