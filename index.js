@@ -22,11 +22,6 @@ async function getData() {
     }
 }
 
-FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-    console.log(response);
-});
-
 // Hàm gửi dữ liệu đồng bộ
 const postDataUser = async () => {
     await getData();
